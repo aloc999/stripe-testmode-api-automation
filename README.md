@@ -76,6 +76,12 @@ STRIPE_BASE_URL=http://127.0.0.1:12111 STRIPE_SECRET_KEY=sk_test_mock pytest
 
 Invalid-key tests always call `https://api.stripe.com` so the 401 is Stripe's.
 
+**Worker count vs. response-time budget:** `pytest.ini` defaults to `-n auto`, using all available CPU cores. Running many concurrent requests against Stripe's API from a location with higher network latency can occasionally push an individual read close to `STRIPE_MAX_RESPONSE_MS`. For a more conservative, stable run:
+```bash
+python -m pytest -n 2
+```
+The budget itself (1000ms default) is left unchanged — this is a concurrency/network note, not a threshold adjustment.
+
 ## Report
 
 ```
@@ -98,12 +104,6 @@ reports/report.html
 - **Test Mode hard-stop.** `load_settings()` raises if `STRIPE_SECRET_KEY` starts with `sk_live_`.
 - **Cleanup.** The `customer` fixture deletes the customer it created.
 - **401 is live.** Auth failures are not mocked.
-- **Worker count vs. response-time budget:** `pytest.ini` defaults to `-n auto`, using all available CPU cores. Running many concurrent requests against Stripe's API from a location with higher network latency can occasionally push an individual read close to `STRIPE_MAX_RESPONSE_MS`. For a more conservative, stable run:
-```bash
-python -m pytest -n 2
-```
-The budget itself (1000ms default) is left unchanged — this is a concurrency/network note, not a threshold adjustment.
-
 
 ## License
 
