@@ -43,6 +43,12 @@ cp .env.example .env
 # paste your sk_test_ key into .env
 ```
 
+### Windows / macOS notes
+
+- macOS: same commands as Linux (`python3` via Xcode tools or Homebrew).
+- Windows (PowerShell): use `.venv\Scripts\Activate.ps1` instead of `source .venv/bin/activate`, `copy .env.example .env` instead of `cp`, and `py -m venv .venv` if `python3` is not on PATH.
+- `docker compose up -d` works on all three OSes via Docker Desktop.
+
 Required packages:
 
 | Package | Role |
